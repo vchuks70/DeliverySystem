@@ -9,8 +9,14 @@ using System.Threading.Tasks;
 namespace Data
 {
   public  class Order: BaseClass
+
     {
-        public ICollection<ProductAndService> ProductAndServices { get; set; }
+        public Order()
+        {
+            OrderProduct = new Collection<OrderProduct>();
+        }
+ 
+    public ICollection<OrderProduct > OrderProduct { get; set; }
         public ApplicationUser Customer { get; set; }
         public ApplicationUser Courier { get; set; }
 
@@ -18,9 +24,9 @@ namespace Data
             
         public string DestinationLocation { get; set; }
 
-        public DateTime DeliveryCompletedTime { get; set; }
+        public DateTime? DeliveryCompletedTime { get; set; }
 
-        public DateTime EstimatedDeliveryTime { get; set; }
+        public DateTime? EstimatedDeliveryTime { get; set; }
             
         public bool IsCompleted { get; set; }
         public OrderStatus OrderStatus { get; set; }
@@ -29,15 +35,21 @@ namespace Data
         public decimal ProductTotalPrice { get; set; }
 
      
-        public decimal LogisticsPrice { get; set; } 
+        public decimal LogisticsPrice { get; set; }
+
+        public DateTime OrderTime { get; set; }
 
 
 
 
 
-        public Order()
-        {
-            ProductAndServices = new Collection<ProductAndService>();
-        }
+        
+    }
+    
+    public class OrderProduct: BaseClass
+    {
+      
+        public ProductAndService ProductAndServices { get; set; }
+        public decimal PriceWhenOrdered { get; set; }
     }
 }

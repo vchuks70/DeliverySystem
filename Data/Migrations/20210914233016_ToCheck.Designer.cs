@@ -4,14 +4,16 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210914233016_ToCheck")]
+    partial class ToCheck
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,15 +114,15 @@ namespace Data.Migrations
                     b.Property<DateTime?>("EstimatedDeliveryTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("GetOrderProductId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
 
                     b.Property<decimal>("LogisticsPrice")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("OrderProductId")
-                        .HasColumnType("int");
 
                     b.Property<int?>("OrderStatusId")
                         .HasColumnType("int");
@@ -138,7 +140,7 @@ namespace Data.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("OrderProductId");
+                    b.HasIndex("GetOrderProductId");
 
                     b.HasIndex("OrderStatusId");
 
@@ -152,8 +154,7 @@ namespace Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<decimal>("PriceWhenOrdered")
-                        .HasPrecision(18, 2)
+                    b.Property<decimal>("PriceAtOrder")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
@@ -390,9 +391,9 @@ namespace Data.Migrations
                         .WithMany()
                         .HasForeignKey("CustomerId");
 
-                    b.HasOne("Data.OrderProduct", "OrderProduct")
+                    b.HasOne("Data.OrderProduct", "GetOrderProduct")
                         .WithMany()
-                        .HasForeignKey("OrderProductId");
+                        .HasForeignKey("GetOrderProductId");
 
                     b.HasOne("Data.OrderStatus", "OrderStatus")
                         .WithMany()
@@ -402,7 +403,7 @@ namespace Data.Migrations
 
                     b.Navigation("Customer");
 
-                    b.Navigation("OrderProduct");
+                    b.Navigation("GetOrderProduct");
 
                     b.Navigation("OrderStatus");
                 });

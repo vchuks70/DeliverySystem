@@ -9,15 +9,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data
 {
-   public class ApplicationDbContext: IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options): base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
         }
 
-  
 
+        public DbSet<OrderProduct> OrderProduct { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderStatus> OrderStatuses { get; set; }
         public DbSet<ProductAndService> ProductAndServices { get; set; }
@@ -29,7 +29,9 @@ namespace Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderProductConfiguration());
         }
     }
+       
 }
     
