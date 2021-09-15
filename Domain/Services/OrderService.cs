@@ -82,6 +82,19 @@ namespace Domain.Services
 
             return new GlobalResponse { Status = true, Message = $"Successful" };
         }
+
+        public async Task<GlobalResponse> AddOrderStatus(OrderStatusRequest model)
+        {
+            var OrderStatus = await _db.OrderStatuses.FirstOrDefaultAsync(x=>x.Status == model.Status);
+            if(OrderStatus != null)
+            {
+                return new GlobalResponse { Status = false, Message = "Order Status already exists" };
+            }
+            var newOrderStatus = new OrderStatus {Status = model.Status} ;
+            await _db.OrderStatuses.AddAsync(newOrderStatus);
+            await _db.SaveChangesAsync();
+            return new GlobalResponse { Status = true, Message = "Order Status Created " };
+        }
     }
 }
 

@@ -11,6 +11,7 @@ namespace Domain.Interface
     public interface IOrder
     {
         Task<GlobalResponse> AddNewOrder(AddOrder model);
+        Task<GlobalResponse> AddOrderStatus(OrderStatusRequest model);
 
     }
 }
