@@ -95,6 +95,29 @@ namespace Domain.Services
             await _db.SaveChangesAsync();
             return new GlobalResponse { Status = true, Message = "Order Status Created " };
         }
+
+        public async Task<OrderStatus> GetOrderStatus(int CustomerId)
+        {
+            var GetOrder = await _db.OrderStatuses.FirstOrDefaultAsync(x => x.Id == CustomerId);
+            if (GetOrder is null)
+            {
+                return null;
+            }
+            return GetOrder;
+        }
+
+        public async Task<GlobalResponse> DeleteOrder(int CustomerId)
+        {
+            var GetOrder = await _db.OrderStatuses.FirstOrDefaultAsync(x => x.Id == CustomerId);
+            if (GetOrder is null)
+            {
+                return new GlobalResponse {Status = false, Message = "Order not found" };
+            }
+            _db.OrderStatuses.Remove(GetOrder);
+            await _db.SaveChangesAsync();
+             return new GlobalResponse { Status = true, Message = "Order Deleted" }; ;
+        }
     }
 }
+
 

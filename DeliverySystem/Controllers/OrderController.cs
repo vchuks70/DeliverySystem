@@ -36,5 +36,21 @@ namespace DeliverySystem.Controllers
             var result = await OrderService.AddOrderStatus(model);
             return result.Status == true ? Ok(result) : BadRequest(result);
         }
+
+        [HttpGet]
+        [Route("GetOrderStatus/{CustomerId}")]
+        public async Task<ActionResult<OrderStatus>> GetOrderStatus([FromRoute] int CustomerId)
+        {
+            var result = await OrderService.GetOrderStatus(CustomerId);
+            return result != null ? Ok(result) : NotFound(); ;
+        }
+
+        [HttpDelete]
+        [Route("DeleteOrder/{CustomerId}")]
+        public async Task<IActionResult> DeleteOrder([FromRoute] int CustomerId)
+        {
+            var result = await OrderService.DeleteOrder(CustomerId);
+            return result.Status == true ? Ok(result) : NotFound(); ;
+        }
     }
 }
