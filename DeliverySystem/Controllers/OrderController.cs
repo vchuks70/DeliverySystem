@@ -30,7 +30,7 @@ namespace DeliverySystem.Controllers
         }
 
         [HttpPost]
-        [Route("AddOrderStatus")]
+        [Route("add/order-status")]
         public async Task<IActionResult> AddOrderStatus([FromBody] OrderStatusRequest model)
         {
             var result = await OrderService.AddOrderStatus(model);
@@ -38,19 +38,43 @@ namespace DeliverySystem.Controllers
         }
 
         [HttpGet]
-        [Route("GetOrderStatus/{CustomerId}")]
-        public async Task<ActionResult<OrderStatus>> GetOrderStatus([FromRoute] int CustomerId)
+        [Route("order-status/{orderStatusId}")]
+        public async Task<ActionResult<OrderStatus>> GetOrderStatus([FromRoute] int orderStatusId)
         {
-            var result = await OrderService.GetOrderStatus(CustomerId);
+            var result = await OrderService.GetOrderStatus(orderStatusId);
             return result != null ? Ok(result) : NotFound(); ;
         }
 
         [HttpDelete]
-        [Route("DeleteOrder/{CustomerId}")]
-        public async Task<IActionResult> DeleteOrder([FromRoute] int CustomerId)
+        [Route("delete-order/{orderId}")]
+        public async Task<IActionResult> DeleteOrder([FromRoute] int orderId)
         {
-            var result = await OrderService.DeleteOrder(CustomerId);
-            return result.Status == true ? Ok(result) : NotFound(); ;
+            var result = await OrderService.DeleteOrder(orderId);
+            return result.Status == true ? Ok(result) : NotFound(); 
+        }
+
+        [HttpGet]
+        [Route("complete-order/{orderId}")]
+        public async Task<IActionResult> CompleteOrder([FromRoute] int orderId)
+        {
+            var result = await OrderService.CompleteOrder(orderId);
+            return result.Status == true ? Ok(result) : NotFound(); 
+        }
+
+        [HttpGet]
+        [Route("courier/{orderId}")]
+        public async Task<IActionResult> GetOrderCourier([FromRoute] int orderId)
+        {
+            var result = await OrderService.GetOrderCourier(orderId);
+            return result != null ? Ok(result) : NotFound(); 
+        }
+
+        [HttpGet]
+        [Route("get-order/{orderId}")]
+        public async Task<IActionResult> GetOrder([FromRoute] int orderId)
+        {
+            var result = await OrderService.GetOrder(orderId);
+            return result != null ? Ok(result) : NotFound();
         }
     }
 }

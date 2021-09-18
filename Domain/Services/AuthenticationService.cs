@@ -53,6 +53,7 @@ namespace Domain.Services
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.Name.Replace(" ", ""),
                 Name = model.Name,
+                PhoneNumber = model.PhoneNumber
             };
             var result = await userManager.CreateAsync(user, model.Password);
             if (result.Succeeded == false)

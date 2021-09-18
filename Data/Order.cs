@@ -51,5 +51,6 @@ namespace Data
       
         public ProductAndService ProductAndServices { get; set; }
         public decimal PriceWhenOrdered { get; set; }
+        public DateTime OrderTime { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Data;
 using DeliverySystem.Helper.Response;
 using Domain.Helper.Request;
+using Domain.Helper.Response;
 using Domain.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -69,7 +70,9 @@ namespace Domain.Services
                 var newOrderProduct = new OrderProduct
                 {
                     ProductAndServices = Product,
-                    PriceWhenOrdered = Product.Price
+                    PriceWhenOrdered = Product.Price,
+                    OrderTime = order.OrderTime
+                    
                 };
                 order.OrderProduct.Add(newOrderProduct);
             }
@@ -96,26 +99,67 @@ namespace Domain.Services
             return new GlobalResponse { Status = true, Message = "Order Status Created " };
         }
 
-        public async Task<OrderStatus> GetOrderStatus(int CustomerId)
+        public async Task<OrderStatus> GetOrderStatus(int orderStatusId)
         {
-            var GetOrder = await _db.OrderStatuses.FirstOrDefaultAsync(x => x.Id == CustomerId);
+            var GetOrderStatus = await _db.OrderStatuses.FirstOrDefaultAsync(x => x.Id == orderStatusId);
+          
+            return GetOrderStatus;
+        }
+
+        public async Task<GlobalResponse> DeleteOrder(int orderId)
+        {
+            var Order = await _db.Orders.FirstOrDefaultAsync(x => x.Id == orderId);
+            if (Order is null)
+            {
+                return new GlobalResponse {Status = false, Message = "Order not found" };
+            }
+            _db.Orders.Remove(Order);
+            await _db.SaveChangesAsync();
+             return new GlobalResponse { Status = true, Message = "Order Deleted" }; 
+        }
+
+        public async Task<GlobalResponse> CompleteOrder(int orderId)
+        {
+            var order = await _db.Orders.FirstOrDefaultAsync(x => x.Id == orderId);
+            if (order is null)
+            {
+                return new GlobalResponse { Status = false, Message = "Order not found" };
+            }
+            order.IsCompleted = true;
+            order.DeliveryCompletedTime = DateTime.Now;
+            _db.Update(order);
+            await _db.SaveChangesAsync();
+            return new GlobalResponse { Status = true, Message = "Order Completed" };
+        }
+
+        public async Task<Order> GetOrder(int orderId)
+        {
+            var GetOrder = await _db.Orders
+                 .Include(x => x.Customer)
+                .Include(x => x.OrderProduct)
+                .Include(x => x.OrderStatus)
+                .Include(x => x.Courier)
+                .FirstOrDefaultAsync(x => x.Id == orderId);
+
+
+            return GetOrder;
+        }
+
+        public async Task<OrderCourierResponse> GetOrderCourier(int orderId)
+        {
+            var GetOrder = await _db.Orders
+                .Include(x => x.Courier).Include(x => x.OrderStatus)
+                .FirstOrDefaultAsync(x => x.Id == orderId);
+
             if (GetOrder is null)
             {
                 return null;
             }
-            return GetOrder;
-        }
 
-        public async Task<GlobalResponse> DeleteOrder(int CustomerId)
-        {
-            var GetOrder = await _db.OrderStatuses.FirstOrDefaultAsync(x => x.Id == CustomerId);
-            if (GetOrder is null)
-            {
-                return new GlobalResponse {Status = false, Message = "Order not found" };
-            }
-            _db.OrderStatuses.Remove(GetOrder);
-            await _db.SaveChangesAsync();
-             return new GlobalResponse { Status = true, Message = "Order Deleted" }; ;
+            return new OrderCourierResponse() { Name = GetOrder.Courier.Name, PhoneNumber = GetOrder.Courier.PhoneNumber };
+
+
+         
         }
     }
 }

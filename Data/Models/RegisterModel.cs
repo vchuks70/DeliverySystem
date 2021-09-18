@@ -18,8 +18,11 @@ namespace Data.Models
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
 
-        [Required (ErrorMessage = "Select User Role")]
+        [Required (ErrorMessage = "User Role is required")]
         public string RoleId { get; set; }
+
+        [Required(ErrorMessage = "Phone number is required")]
+        public string PhoneNumber { get; set; }
 
 
     }
