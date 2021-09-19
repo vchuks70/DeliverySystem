@@ -55,6 +55,13 @@ namespace Domain.Services
                 Name = model.Name,
                 PhoneNumber = model.PhoneNumber
             };
+
+            if (role.Name.ToUpper() == "COURIER")
+            {
+                user.IsCourier = true;
+                    user.IsAvaliable = true;
+            }
+
             var result = await userManager.CreateAsync(user, model.Password);
             if (result.Succeeded == false)
             {
@@ -65,6 +72,7 @@ namespace Domain.Services
 
             await userManager.AddToRoleAsync(user, role.Name);
 
+          
             await _db.SaveChangesAsync();
             return new GlobalResponse { Status = true, Message = "User Created Successfully" };
         }
@@ -75,14 +83,14 @@ namespace Domain.Services
             var user = await userManager.FindByEmailAsync(model.Email);
             if (user is null)
             {
-                return new LoginResponse { Status = false, Message = "Failed, User not found", Token = null };
+                return new LoginResponse { Status = false, Message = "Failed, User not found", Token = null , UserId = null};
             }
             var check = await userManager.CheckPasswordAsync(user, model.Password);
             if (check)
             {
                 var userRoles = await userManager.GetRolesAsync(user);
                 var token = _jwtGenerator.CreateToken(user, userRoles.FirstOrDefault());
-                return new LoginResponse { Status = true, Message = "Login Successful", Token = token };
+                return new LoginResponse { Status = true, Message = "Login Successful", Token = token, UserId = user.Id };
             }
 
             return new LoginResponse { Status = false, Message = "Login Failed, Invalid Password", Token = null };

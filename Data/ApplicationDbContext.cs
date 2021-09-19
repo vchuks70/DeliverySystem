@@ -19,10 +19,11 @@ namespace Data
 
         public DbSet<OrderProduct> OrderProduct { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderStatus> OrderStatuses { get; set; }
+        //public DbSet<OrderStatus> OrderStatuses { get; set; }
         public DbSet<ProductAndService> ProductAndServices { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<Route> Routes { get; set; }
+        public DbSet<RatingAndReview> RatingAndReviews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

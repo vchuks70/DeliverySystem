@@ -13,6 +13,8 @@ namespace Data
     {
         public string Name { get; set; }
             public ICollection<Route> Routes { get; set; }
+        public bool IsAvaliable { get; set; } = true;
+        public bool IsCourier { get; set; } = false;
 
         public ApplicationUser()
         {

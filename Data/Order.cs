@@ -18,7 +18,7 @@ namespace Data
  
     public ICollection<OrderProduct > OrderProduct { get; set; }
         public ApplicationUser Customer { get; set; }
-        public ApplicationUser Courier { get; set; }
+        public ApplicationUser? Courier { get; set; }
 
         public string CurrentLocation { get; set; }
             
@@ -29,7 +29,7 @@ namespace Data
         public DateTime? EstimatedDeliveryTime { get; set; }
             
         public bool IsCompleted { get; set; }
-        public OrderStatus OrderStatus { get; set; }
+        public string OrderStatus { get; set; }
             
    
         public decimal ProductTotalPrice { get; set; }
@@ -39,11 +39,13 @@ namespace Data
 
         public DateTime OrderTime { get; set; }
 
+        public bool IsAccepted { get; set; } = false;
 
 
 
 
-        
+
+
     }
     
     public class OrderProduct: BaseClass
