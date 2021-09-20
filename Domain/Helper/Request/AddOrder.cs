@@ -21,7 +21,7 @@ namespace Domain.Helper.Request
         public DateTime EstimatedDeliveryTime { get; set; }
 
         public bool IsCompleted { get; set; }
-        public int OrderStatusId { get; set; }
+    //    public int OrderStatusId { get; set; }
 
 
         public decimal ProductTotalPrice { get; set; }

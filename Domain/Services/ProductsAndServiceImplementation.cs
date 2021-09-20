@@ -42,6 +42,7 @@ namespace Domain.Services
                 InventoryCount = model.InventoryCount,
             };
             await _db.ProductAndServices.AddAsync(NewProduct);
+            await _db.SaveChangesAsync();
             return new GlobalResponse { Status = true, Message = "New Product Created" };
         }
 

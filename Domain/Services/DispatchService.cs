@@ -83,11 +83,17 @@ namespace Domain.Services
         public async Task<GlobalResponse> AcceptOrder(int orderId)
         {
 
-            var order = await _db.Orders.FirstOrDefaultAsync(x => x.Id == orderId);
+            var order = await _db.Orders.Include(x=> x.Courier).FirstOrDefaultAsync(x => x.Id == orderId);
             if (order is null)
             {
                 return new GlobalResponse { Status = false, Message = "Order not found" };
             }
+
+            if (order.Courier is null)
+            {
+                return new GlobalResponse { Status = false, Message = "Order Courier not found" };
+            }
+
             order.IsAccepted = true;
             order.OrderStatus = "Order Accepted By Courier";
 
@@ -121,7 +127,8 @@ namespace Domain.Services
         public async Task<GlobalResponse> StartDeliveryOrder(int orderId)
         {
 
-            var order = await _db.Orders.FirstOrDefaultAsync(x => x.Id == orderId);
+            var order = await _db.Orders
+                .Include(x => x.Customer).Include(x => x.Courier).FirstOrDefaultAsync(x => x.Id == orderId);
             if (order is null)
             {
                 return new GlobalResponse { Status = false, Message = "Order not found" };
