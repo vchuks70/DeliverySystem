@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Data;
+using DeliverySystem.Helper.Response;
 using Domain.Helper.Request;
 using Domain.Interface;
 using Microsoft.AspNetCore.Http;
@@ -61,10 +62,10 @@ namespace DeliverySystem.Controllers
 
         [HttpGet]
         [Route("start-delivery-order/{orderId}")]
-        public async Task<ActionResult<OrderStatus>> StartDeliveryOrder([FromRoute] int orderId)
+        public async Task<ActionResult<GlobalResponse>> StartDeliveryOrder([FromRoute] int orderId)
         {
             var result = await DispatchService.StartDeliveryOrder(orderId);
-            return result != null ? Ok(result) : NotFound();
+            return result.Status == true ? Ok(result) : BadRequest();
         }
 
         [HttpGet]

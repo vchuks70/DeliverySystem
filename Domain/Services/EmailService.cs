@@ -23,52 +23,38 @@ namespace Domain.Services
 
         public void Send(string to, string subject, string html, string @from = null)
         {
-            // create message
-            var email = new MimeMessage();
-            //   email.From.Add(MailboxAddress.Parse(from ?? _appSettings.EmailFrom));
-            email.From.Add(new MailboxAddress(from ?? _appSettings.EmailFrom, _appSettings.SmtpUser));
-            email.To.Add(MailboxAddress.Parse(to));
-            email.Subject = subject;
-            email.Body = new TextPart(TextFormat.Html) { Text = html };
-
-            Send(email);
-
-            //// send email
-            //using var smtp = new SmtpClient();
-            ////smtp.Connect(_appSettings.SmtpHost, _appSettings.SmtpPort, true);
-            ////smtp.AuthenticationMechanisms.Remove("XOAUTH2");
-            //smtp.Connect(_appSettings.SmtpHost, _appSettings.SmtpPort, false);
-            //smtp.AuthenticationMechanisms.Remove("XOAUTH2");
-            //smtp.Authenticate(_appSettings.SmtpUser, _appSettings.SmtpPass);
-            //smtp.Send(email);
-            //smtp.Disconnect(true);
-        }
-
-        private void Send(MimeMessage mailMessage)
-        {
-            using (var client = new SmtpClient())
+            try
             {
-                try
-                {
-                    client.Connect("smtp.gmail.com", 465, false);
-                    client.AuthenticationMechanisms.Remove("XOAUTH2");
-                    client.Authenticate(_appSettings.SmtpUser, _appSettings.SmtpPass);
+                // create message
+                var email = new MimeMessage();
+                //   email.From.Add(MailboxAddress.Parse(from ?? _appSettings.EmailFrom));
+                email.From.Add(new MailboxAddress(from ?? _appSettings.EmailFrom, _appSettings.SmtpUser));
+                email.To.Add(MailboxAddress.Parse(to));
+                email.Subject = subject;
+                email.Body = new TextPart(TextFormat.Html) { Text = html };
 
-                    client.Send(mailMessage);
-                }
-                catch(Exception e)
-                {
-                    //log an error message or throw an exception, or both.
-                    throw;
-                }
-                finally
-                {
-                    client.Disconnect(true);
-                    client.Dispose();
-                }
+
+
+                // send email
+                using var smtp = new SmtpClient();
+                //smtp.Connect(_appSettings.SmtpHost, _appSettings.SmtpPort, true);
+                //smtp.AuthenticationMechanisms.Remove("XOAUTH2");
+
+                var host = _appSettings.SmtpHost;
+                var port = _appSettings.SmtpPort;
+                smtp.Connect(host, port, false);
+                smtp.AuthenticationMechanisms.Remove("XOAUTH2");
+                smtp.Authenticate(_appSettings.SmtpUser, _appSettings.SmtpPass);
+                smtp.Send(email);
+                smtp.Disconnect(true);
             }
+            catch (Exception)
+            {
 
-
+                //  throw;
+            }
         }
+
+
     }
 }
