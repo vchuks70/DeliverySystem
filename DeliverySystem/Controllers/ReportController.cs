@@ -1,5 +1,7 @@
-﻿using Domain.Helper.Request;
+﻿using Data;
+using Domain.Helper.Request;
 using Domain.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,6 +11,8 @@ using System.Threading.Tasks;
 
 namespace DeliverySystem.Controllers
 {
+
+    [Authorize(Roles = UserRoles.Admin)]
     [Route("api/[controller]")]
     [ApiController]
     public class ReportController : ControllerBase

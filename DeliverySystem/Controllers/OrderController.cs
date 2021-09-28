@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Data;
 using Domain.Helper.Request;
 using Domain.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PayStackDotNetSDK.Methods.Transactions;
@@ -23,6 +24,7 @@ namespace DeliverySystem.Controllers
 			OrderService = orderService;
 		}
 
+		[Authorize(Roles = UserRoles.Admin_Customer)]
 		[HttpPost]
 		[Route("order-payment/{orderId}")]
 		public async Task<IActionResult> TestPay([FromRoute] int  orderId)
@@ -39,6 +41,7 @@ namespace DeliverySystem.Controllers
 
 		}
 
+		[Authorize(Roles = UserRoles.Admin_Customer)]
 		[HttpPost]
 		[Route("AddNewOrder")]
 		public async Task<IActionResult> AddNewOrder([FromBody] AddOrder model)
@@ -48,6 +51,7 @@ namespace DeliverySystem.Controllers
 		}
 
 
+		[Authorize(Roles = UserRoles.Admin)]
 		[HttpDelete]
 		[Route("delete-order/{orderId}")]
 		public async Task<IActionResult> DeleteOrder([FromRoute] int orderId)
@@ -56,6 +60,8 @@ namespace DeliverySystem.Controllers
 			return result.Status == true ? Ok(result) : NotFound(); 
 		}
 
+
+		[Authorize(Roles = UserRoles.Admin_Courier)]
 		[HttpGet]
 		[Route("complete-order/{orderId}")]
 		public async Task<IActionResult> CompleteOrder([FromRoute] int orderId)
@@ -64,6 +70,8 @@ namespace DeliverySystem.Controllers
 			return result.Status == true ? Ok(result) : NotFound(); 
 		}
 
+
+		[Authorize(Roles = UserRoles.Admin)]
 		[HttpGet]
 		[Route("courier/{orderId}")]
 		public async Task<IActionResult> GetOrderCourier([FromRoute] int orderId)
@@ -72,6 +80,8 @@ namespace DeliverySystem.Controllers
 			return result != null ? Ok(result) : NotFound(); 
 		}
 
+
+		[Authorize(Roles = UserRoles.Admin_Courier)]
 		[HttpGet]
 		[Route("get-order/{orderId}")]
 		public async Task<IActionResult> GetOrder([FromRoute] int orderId)
@@ -80,6 +90,8 @@ namespace DeliverySystem.Controllers
 			return result != null ? Ok(result) : NotFound();
 		}
 
+
+		[Authorize(Roles = UserRoles.Admin_Customer)]
 		[HttpPost]
 		[Route("add/rating-and-review")]
 		public async Task<IActionResult> AddRatingAndReview([FromBody] AddRatingAndReviewRequest model)
@@ -87,7 +99,9 @@ namespace DeliverySystem.Controllers
 			var result = await OrderService.AddRatingAndReview(model);
 			return result.Status == true ? Ok(result) : BadRequest(result);
 		}
-			
+
+
+		[Authorize(Roles = UserRoles.Admin)]
 		[HttpGet]
 		[Route("rating-and-review/{orderId}")]
 		public async Task<ActionResult<OrderStatus>> GetOrderRatingAndReview([FromRoute] int orderId)
@@ -97,9 +111,10 @@ namespace DeliverySystem.Controllers
 		}
 
 
+		[Authorize(Roles = UserRoles.Admin)]
 		[HttpPost]
 		[Route("reasign-order")]
-		public async Task<IActionResult> AddRatingAndReview([FromBody] ReasignOrderRequest model)
+		public async Task<IActionResult> ReasignOrder([FromBody] ReasignOrderRequest model)
 		{
 			var result = await OrderService.ReasignOrder(model);
 			return result.Status == true ? Ok(result) : BadRequest(result);

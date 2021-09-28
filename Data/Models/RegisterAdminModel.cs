@@ -21,6 +21,6 @@ namespace Data.Models
 
 
         [JsonIgnore]
-        public readonly string Role = "Admin";
+        public readonly string Role = UserRoles.Admin;
     }
 }

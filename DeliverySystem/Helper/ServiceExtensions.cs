@@ -79,6 +79,7 @@ namespace DeliverySystem.Helper
             services.AddScoped<IRoute, RouteService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IDispatch, DispatchService>();
+            services.AddScoped<ICustomerService, CustomerService>();
 
         }
     }

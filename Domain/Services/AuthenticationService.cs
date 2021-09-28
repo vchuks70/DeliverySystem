@@ -56,7 +56,7 @@ namespace Domain.Services
                 PhoneNumber = model.PhoneNumber
             };
 
-            if (role.Name.ToUpper() == "COURIER")
+            if (role.Name.ToUpper() == UserRoles.Courier.ToUpper())
             {
                 user.IsCourier = true;
                     user.IsAvaliable = true;
