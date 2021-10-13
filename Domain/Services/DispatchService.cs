@@ -45,17 +45,31 @@ namespace Domain.Services
 
         public async Task<IEnumerable<GetAllCourierResponse>> GetAllCourier()
         {
+            var result = await (from user in _db.Users
+                                let orders =   (_db.Orders.Where(x => x.IsCompleted == true)).ToList()
+                                   join userRoles in _db.UserRoles on user.Id equals userRoles.UserId
+                                   join roles in _db.Roles.Where(x => x.Name == UserRoles.Courier) on userRoles.RoleId equals roles.Id
+                                  
+                                   select new GetAllCourierResponse
+                                   {
+                                       CourierId = user.Id,
+                                       CourierName = user.Name,
+                                       CourierPhoneNumber = user.PhoneNumber,
+                                       DeliveryCount = orders.Count(),
+                                   }
+                    ).ToListAsync();
 
-            var result = await _db.Orders
-                .Include(x => x.Courier)
-                .Where(x => x.IsCompleted == true)
-                .GroupBy(x => x.Courier)
-                .Select(y => new GetAllCourierResponse {
-                    CourierId = y.Key.Id,
-                    CourierName = y.Key.Name,
-                    CourierPhoneNumber = y.Key.PhoneNumber,
-                    DeliveryCount = y.Count(),
-                }).ToListAsync();
+
+            //var result = await _db.Orders
+            //    .Include(x => x.Courier)
+            //    .Where(x => x.IsCompleted == true)
+            //    .GroupBy(x => x.Courier)
+            //    .Select(y => new GetAllCourierResponse {
+            //        CourierId = y.Key.Id,
+            //        CourierName = y.Key.Name,
+            //        CourierPhoneNumber = y.Key.PhoneNumber,
+            //        DeliveryCount = y.Count(),
+            //    }).ToListAsync();
 
             return result;
 
