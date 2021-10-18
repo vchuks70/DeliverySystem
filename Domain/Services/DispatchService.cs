@@ -199,5 +199,14 @@ namespace Domain.Services
 
         }
 
+        public async Task<GetAllCourierResponse> GetSingleCourier(string courierId)
+        {
+            var SingleCourier = await userManager.FindByIdAsync(courierId);
+            return new GetAllCourierResponse {
+                CourierId = SingleCourier.Id,
+                CourierName = SingleCourier.Name,
+                CourierPhoneNumber = SingleCourier.PhoneNumber,
+            };
+        }
     }
 }

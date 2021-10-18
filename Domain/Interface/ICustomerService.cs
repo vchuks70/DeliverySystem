@@ -10,5 +10,6 @@ namespace Domain.Interface
     public interface ICustomerService
     {
         Task<IEnumerable<GetAllCustomersResponse>> GetAllCustomer();
+        Task<GetAllCustomersResponse> GetSingleCustomer(string customerId);
     }
 }

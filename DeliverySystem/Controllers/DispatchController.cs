@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Data;
 using DeliverySystem.Helper.Response;
 using Domain.Helper.Request;
+using Domain.Helper.Response;
 using Domain.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -90,6 +91,15 @@ namespace DeliverySystem.Controllers
         {
             var result = await DispatchService.EndDeliveryOrder(orderId);
             return result != null ? Ok(result) : NotFound();
+        }
+
+        [Authorize(Roles = UserRoles.Admin_Courier)]
+        [HttpGet]
+        [Route("get-single-courier/{courierId}")]
+        public async Task<ActionResult<GetAllCourierResponse>> GetSingleCourier(string courierId)
+        {
+            var SingleCourier = await DispatchService.GetSingleCourier(courierId);
+            return SingleCourier != null ? Ok(SingleCourier) : NotFound();
         }
     }
 }

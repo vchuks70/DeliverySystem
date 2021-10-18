@@ -13,6 +13,7 @@ namespace Domain.Interface
    public interface IDispatch
     {
         Task<IEnumerable<GetAllCourierResponse>> GetAllCourier();
+        Task<GetAllCourierResponse> GetSingleCourier(string courierId);
         Task<GlobalResponse> CourierAvaliablity(CourierAvailablityRequest  model);
 
         Task<IEnumerable<Order>> GetAllCourierOrders(string courierId);

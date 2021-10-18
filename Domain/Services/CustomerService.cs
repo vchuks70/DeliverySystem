@@ -6,17 +6,19 @@ using System.Threading.Tasks;
 using Data;
 using Domain.Helper.Response;
 using Domain.Interface;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Services
 {
     public class CustomerService : ICustomerService
     {
-            private readonly ApplicationDbContext _db;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly ApplicationDbContext _db;
 
-        public CustomerService( ApplicationDbContext db )
+        public CustomerService(UserManager<ApplicationUser> userManager, ApplicationDbContext db )
         {
-
+            this.userManager = userManager;
             _db = db;
 
         }
@@ -36,6 +38,12 @@ namespace Domain.Services
                         ).ToListAsync();
 
             return customers;
+        }
+
+        public async Task<GetAllCustomersResponse> GetSingleCustomer(string customerId)
+        {
+            var SingleCustomer = await userManager.FindByIdAsync(customerId);
+            return new GetAllCustomersResponse { Email = SingleCustomer.Email, Id = SingleCustomer.Id, Name = SingleCustomer.UserName, PhoneNumber = SingleCustomer.PhoneNumber };
         }
     }
 }
